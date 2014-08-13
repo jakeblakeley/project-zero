@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Access-Control-Allow-Origin" content="*">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        
+        <div class="perspective">
+            <div class="helloSection">
+                <div class="centerHelloText">
+                    <h1 class="helloText">Hello</h1>
+                </div>
+            </div>
+        
+            <div class="instagramFeed">
+                <img src="img/ideony.svg" alt="" class="ideony">
+                <!-- Content pulled from instagram goes here -->
+            </div>
+        </div>
+
+        <div class="sideNav">
+            <div class="sideNavHoverPoint"></div>
+            <div class="formContainer">
+                <h3>Custom Greeting</h3>
+                <textarea name="" id="" placeholder="Type a custom greeting"></textarea>
+                <input type="text" placeholder="Color ex. red or #BADA55">
+                <select name="time" id="time">
+                    <option value="">Duration of greeting</option>
+                    <option value="1800000">30min</option>
+                    <option value="3600000">1 hour</option>
+                    <option value="7200000">2 hours</option>
+                    <option value="10800000">3 hours</option>
+                    <option value="28800000">All day</option>
+                </select>
+                
+                <button class="submit">Update the greeting</button>
+                <p class="errorMessage"></p>
+                <p class="successMessage"></p>
+            </div>
+            <div class="sideNavNotes">
+                <h4>Tips/Tricks</h4>
+                <p>Refresh the page to remove a greeting.<br>
+                    Click anywhere outside this side bar to test the greeting after its complete.<br>
+                    If a page refreshes youll have to redo the greeting.</p>
+            </div>
+        </div>
+
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="http://yui.yahooapis.com/3.17.2/build/yui/yui-min.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
