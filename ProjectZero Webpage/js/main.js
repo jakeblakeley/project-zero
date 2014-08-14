@@ -5,7 +5,7 @@
  // Global Variables
 //====================================================================//
 //settings
-var animationHoldLength	= 3700,
+var animationHoldLength	= 4500,
 	timeBetweenHellos	= 4500,
 	timeout 			= 0,	//time out to get rid of custom input
 	isThereCustomInput 	= false,
@@ -730,6 +730,7 @@ function getSensorInfo(){
 			if (parsedData === 1){
 				//function to say hello
 				helloLogic();
+				console.log("motion detected");
 				//only trigger hello every X seconds
 				setTimeout(function(){
 					getSensorInfo();
@@ -738,7 +739,6 @@ function getSensorInfo(){
 			} else if (parsedData === 0){
 				setTimeout(function(){
 					getSensorInfo();
-					console.log("no motion");
 				}, 150);
 			//in case of errors
 			} else {
