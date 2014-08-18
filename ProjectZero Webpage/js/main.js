@@ -8,7 +8,7 @@
 //settings
 var animationHoldLength			= 4500, 	//the time that a greeting is held for
 	timeBetweenHellos			= 5500, 	//the time between hello greetings before another can trigger
-	timeBetweenInstagrams 		= 2000, 	//the time between each instagram grid
+	timeBetweenInstagrams 		= 10000, 	//the time between each instagram grid
 	hashtag 					= "ideony", 	//new york hashtag
 	location1					= "60047", 		//San fran location id
 	location2					= "3379961", 	//London location id
