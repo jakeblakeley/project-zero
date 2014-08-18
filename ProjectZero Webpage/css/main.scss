@@ -63,6 +63,15 @@ body{
   //====================================================================//
  // Instagram feed 
 //====================================================================//
+.instagramFeedContainer{
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+    z-index: 1;
+}
 .instagramFeed{
     top: 0px;
     left: 0px;
@@ -70,22 +79,62 @@ body{
     height: 100%;
     overflow: hidden;
     position: absolute;
-    z-index: 1;
     .instagramImage{
+        z-index: 1;
         height: 33.333333%;
         width: 20%;
         float: left;
         background-size: contain;
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        -ms-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: scale(0) translate3d(0,0,0);
+            -ms-transform: scale(0) translate3d(0,0,0);
+             -o-transform: scale(0) translate3d(0,0,0);
+                transform: scale(0) translate3d(0,0,0);
+        -webkit-transition: all 0.8s cubic-bezier(0.7, 0, 0.4, 1.0);
+        -webkit-transition: all 0.8s cubic-bezier(0.7, -0.7, 0.4, 1.0); 
+           -moz-transition: all 0.8s cubic-bezier(0.7, -0.7, 0.4, 1.0); 
+             -o-transition: all 0.8s cubic-bezier(0.7, -0.7, 0.4, 1.0); 
+                transition: all 0.8s cubic-bezier(0.7, -0.7, 0.4, 1.0);
+        -webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.4, 1.0);
+        -webkit-transition-timing-function: cubic-bezier(0.7, -0.7, 0.4, 1.0); 
+           -moz-transition-timing-function: cubic-bezier(0.7, -0.7, 0.4, 1.0); 
+             -o-transition-timing-function: cubic-bezier(0.7, -0.7, 0.4, 1.0); 
+                transition-timing-function: cubic-bezier(0.7, -0.7, 0.4, 1.0);
+        &.visible{
+            -webkit-transform: scale(1) translate3d(0,0,0);
+                -ms-transform: scale(1) translate3d(0,0,0);
+                 -o-transform: scale(1) translate3d(0,0,0);
+                    transform: scale(1) translate3d(0,0,0);
+            -webkit-transition: all 0.8s cubic-bezier(0.5, 0.0, 0.4, 1.0) 0.4s; 
+               -moz-transition: all 0.8s cubic-bezier(0.5, 0.0, 0.4, 1.0) 0.4s; 
+                 -o-transition: all 0.8s cubic-bezier(0.5, 0.0, 0.4, 1.0) 0.4s; 
+                    transition: all 0.8s cubic-bezier(0.5, 0.0, 0.4, 1.0) 0.4s;
+            -webkit-transition-timing-function: cubic-bezier(0.5, 0.0, 0.4, 1.0); 
+               -moz-transition-timing-function: cubic-bezier(0.5, 0.0, 0.4, 1.0); 
+                 -o-transition-timing-function: cubic-bezier(0.5, 0.0, 0.4, 1.0); 
+                    transition-timing-function: cubic-bezier(0.5, 0.0, 0.4, 1.0); 
+        }
     }
-    .ideony{
-        width: 480px;
+    img{
+        height: 160px;
         color: $white;
         font-size: 80px;
         position: absolute;
-        bottom: 48px;
-        right: 64px;
+        bottom: 24px;
+        left: 56px;
         margin: 0px;
         text-shadow: 0px 6px 8px rgba(0,0,0,0.4);
+        opacity: 0;
+        -webkit-transition: 1.2s;
+        -o-transition: 1.2s;
+        transition: 1.2s;
+        z-index: 2;
+        &.fadeIn{
+            opacity: 1;
+        }
     }
 }
 

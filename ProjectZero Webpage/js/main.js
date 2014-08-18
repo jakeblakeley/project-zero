@@ -1,23 +1,38 @@
 /* global console */
 /* global i */
+/* global alert */
 
   //====================================================================//
  // Global Variables
 //====================================================================//
 //settings
-var animationHoldLength	= 4500,
-	timeBetweenHellos	= 4500,
-	timeout 			= 0,	//time out to get rid of custom input
-	isThereCustomInput 	= false,
-	isItAHoliday 		= false,
-	customGreetingArray = [],
-	hashtag 			= "ideony",
-	clientID 			= "c02881f3b2be4c04b016212322378bf2"; //clientID for instagram API
+var animationHoldLength			= 4500, 	//the time that a greeting is held for
+	timeBetweenHellos			= 5500, 	//the time between hello greetings before another can trigger
+	timeBetweenInstagrams 		= 12000, 	//the time between each instagram grid
+	hashtag 					= "ideony", 	//new york hashtag
+	location1					= "60047", 		//San fran location id
+	location2					= "3379961", 	//London location id
+	location3					= "8085344", 	//Chicago location id
+	location4					= "100138", 	//Palo alto location id
+	location5					= "2507883", 	//Boston location id
+	location6					= "51333", 		//Munich location id
+	location7					= "10515124", 	//Singapore location id
+	location8					= "70798210", 	//Tokyo location id
+	location9					= "5838184", 	//Shanghai location id
+	clientID 					= "c02881f3b2be4c04b016212322378bf2"; //clientID for instagram API
 
 //global elements
-var helloSection		= $(".helloSection"),
-	instagramSection	= $(".instagramFeed"),
-	textGreeting 		= [];
+var helloSection				= $(".helloSection"),
+	instagramSection			= $(".instagramFeedContainer"),
+	instagramAnimationInterval 	= null,
+	timeoutBeforeAnimation		= null,
+	currentSection 				= 0,
+	timeout 					= 0,	//time out to get rid of custom input
+	isThereCustomInput 			= false,
+	isItAHoliday 				= false,
+	initialAnimate  			= false,
+	textGreeting 				= [],
+	customGreetingArray 		= [];
 
 
 function helloBounce(){
@@ -87,10 +102,6 @@ function helloZoomIn(){
  // Main Hello Animation
 //====================================================================//
 function helloAnimation(greetingMessage, textColor, secondaryColor){
-	//
-	//get animation length from # of characters or video length?
-	//
-
 	//variables for text
 	var letterCount		= greetingMessage.length,
 		fontSize 		= (((-letterCount * letterCount) / 10) + ($(window).height() / 4)),
@@ -121,6 +132,15 @@ function helloAnimation(greetingMessage, textColor, secondaryColor){
 
 	//execture the hello
 	randomAnimation();
+
+	//stop instagram animation
+	clearInterval(instagramAnimationInterval);
+
+	//then reinitiate it
+	clearTimeout(timeoutBeforeAnimation);
+	timeoutBeforeAnimation = setTimeout(function(){
+		studioTransitions();
+	}, (animationHoldLength + timeBetweenHellos));
 }
 
   //====================================================================//
@@ -128,7 +148,7 @@ function helloAnimation(greetingMessage, textColor, secondaryColor){
 //====================================================================//
 function buildTextHelloArray(){
 	//basic hellos
-	textGreeting 		= ["Hello", "Yo", "Welcome", "Sup", "Sup?", "Hi", "What's up?", "What is up?", "How's it going", "Why hello there", "Hiya", "G'day Mate", "Hey", "Ello", "Bonjour", "Buongiorno", "Guten tag", "Aloha", "Hola", "He-yo", "Cheerio!", "How do you do?", "No Soliciting. Unless you are selling thin mints", "<span>OMG</span> you’re here!", "You had us at hello", "You’re not in Kansas anymore", "Hello, gorgeous", "Shalom", "You made it!", "I love you so much! Sorry… too soon?", "<span>Hello</span> – Lionel Richie", "We were just thinking about you!", "#hi #howareyou", ":-)", "Howdy partner", "IDE-<span>YO Whats Up?</span>", "Namaste", "Namaskar", "Boo!", "Ni-Hao", "Greetings, Earthling!", "Ciao!", "Come on in yo"];
+	textGreeting 		= ["Hello", "Yo", "Welcome", "Sup", "Sup?", "Hi", "What's up?", "What is up?", "How's it going", "Why hello there", "Hiya", "G'day Mate", "Hey", "Ello", "Bonjour", "Buongiorno", "Guten tag", "Aloha", "Hola", "He-yo", "Cheerio!", "How do you do?", "No Soliciting. Unless you are selling thin mints", "<span>OMG</span> you’re here!", "You had us at hello", "You’re not in Kansas anymore", "Hello, gorgeous", "Shalom", "You made it!", "I love you so much! Sorry… too soon?", "<span>Hello</span> – Lionel Richie", "We were just thinking about you!", "#hi #howareyou", ":-)", "Howdy partner", "IDE-<span>YO Whats Up?</span>", "Namaste", "Namaskar", "Boo!", "Ni-Hao", "Greetings, Earthling!", "Ciao!", "Come on in yo", "helloWorld();", "<span>&lt;greet&gt;</span>Whats up?<span>&lt;&#47;greet&gt;</span>"];
 
   	  //================================================================//
 	 // Time based
@@ -249,8 +269,7 @@ function buildTextHelloArray(){
 	$.when(
 		//New York
 		$.getJSON($url, {
-			    q: "select * from xml where url=" +
-			       "\"http://weather.yahooapis.com/forecastrss?w=2459115\"",
+			    q: "select * from xml where url=" + "\"http://weather.yahooapis.com/forecastrss?w=2459115\"",
 			    format: "json"
 		  	}, function (data) {
 		  		newyorkTemp 		= data.query.results.rss.channel.item.condition.temp;
@@ -263,8 +282,7 @@ function buildTextHelloArray(){
 
 		//Boston
 		$.getJSON($url, {
-			    q: "select * from xml where url=" +
-			       "\"http://weather.yahooapis.com/forecastrss?w=2367105\"",
+			    q: "select * from xml where url=" + "\"http://weather.yahooapis.com/forecastrss?w=2367105\"",
 			    format: "json"
 		  	}, function (data) {
 		  		bostonTemp 		= data.query.results.rss.channel.item.condition.temp;
@@ -274,8 +292,7 @@ function buildTextHelloArray(){
 
 		//Chicago
 		$.getJSON($url, {
-			    q: "select * from xml where url=" +
-			       "\"http://weather.yahooapis.com/forecastrss?w=2379574\"",
+			    q: "select * from xml where url=" + "\"http://weather.yahooapis.com/forecastrss?w=2379574\"",
 			    format: "json"
 		  	}, function (data) {
 		  		chicagoTemp 	= data.query.results.rss.channel.item.condition.temp;
@@ -285,8 +302,7 @@ function buildTextHelloArray(){
 
 		//Palo Alto
 		$.getJSON($url, {
-			    q: "select * from xml where url=" +
-			       "\"http://weather.yahooapis.com/forecastrss?w=2467861\"",
+			    q: "select * from xml where url=" + "\"http://weather.yahooapis.com/forecastrss?w=2467861\"",
 			    format: "json"
 		  	}, function (data) {
 		  		paloaltoTemp 		= data.query.results.rss.channel.item.condition.temp;
@@ -296,8 +312,7 @@ function buildTextHelloArray(){
 
 		//San Francisco
 		$.getJSON($url, {
-			    q: "select * from xml where url=" +
-			       "\"http://weather.yahooapis.com/forecastrss?w=2487956\"",
+			    q: "select * from xml where url=" + "\"http://weather.yahooapis.com/forecastrss?w=2487956\"",
 			    format: "json"
 		  	}, function (data) {
 		  		sanfranTemp 	= data.query.results.rss.channel.item.condition.temp;
@@ -307,8 +322,7 @@ function buildTextHelloArray(){
 
 		//Munich
 		$.getJSON($url, {
-			    q: "select * from xml where url=" +
-			       "\"http://weather.yahooapis.com/forecastrss?w=676757\"",
+			    q: "select * from xml where url=" + "\"http://weather.yahooapis.com/forecastrss?w=676757\"",
 			    format: "json"
 		  	}, function (data) {
 		  		munichTemp 		= data.query.results.rss.channel.item.condition.temp;
@@ -318,8 +332,7 @@ function buildTextHelloArray(){
 
 		//Tokyo
 		$.getJSON($url, {
-			    q: "select * from xml where url=" +
-			       "\"http://weather.yahooapis.com/forecastrss?w=1118370\"",
+			    q: "select * from xml where url=" + "\"http://weather.yahooapis.com/forecastrss?w=1118370\"",
 			    format: "json"
 		  	}, function (data) {
 		  		tokyoTemp 		= data.query.results.rss.channel.item.condition.temp;
@@ -329,8 +342,7 @@ function buildTextHelloArray(){
 
 		//Singapore
 		$.getJSON($url, {
-			    q: "select * from xml where url=" +
-			       "\"http://weather.yahooapis.com/forecastrss?w=24703044\"",
+			    q: "select * from xml where url=" + "\"http://weather.yahooapis.com/forecastrss?w=24703044\"",
 			    format: "json"
 		  	}, function (data) {
 		  		singaporeTemp 		= data.query.results.rss.channel.item.condition.temp;
@@ -340,8 +352,7 @@ function buildTextHelloArray(){
 
 		//Shanghai
 		$.getJSON($url, {
-			    q: "select * from xml where url=" +
-			       "\"http://weather.yahooapis.com/forecastrss?w=2151849\"",
+			    q: "select * from xml where url=" + "\"http://weather.yahooapis.com/forecastrss?w=2151849\"",
 			    format: "json"
 		  	}, function (data) {
 		  		ShanghaiTemp 		= data.query.results.rss.channel.item.condition.temp;
@@ -351,8 +362,7 @@ function buildTextHelloArray(){
 
 		//London
 		$.getJSON($url, {
-			    q: "select * from xml where url=" +
-			       "\"http://weather.yahooapis.com/forecastrss?w=26355493\"",
+			    q: "select * from xml where url=" + "\"http://weather.yahooapis.com/forecastrss?w=26355493\"",
 			    format: "json"
 		  	}, function (data) {
 		  		londonTemp 		= data.query.results.rss.channel.item.condition.temp;
@@ -384,7 +394,7 @@ function buildTextHelloArray(){
 		//if thunder
 		if (newyorkCondition.code >= 2 && newyorkCondition.code <= 4 || newyorkCondition.code >= 37 && newyorkCondition.code <= 39 || newyorkCondition.code === 45 || newyorkCondition.code === 47){
 			textGreeting.push(	"THOR!!!",
-								"Na na-na na na-na, THUNDER!");
+								"Na na-na, na na-na, THUNDER!");
 		}
 
 
@@ -394,9 +404,13 @@ function buildTextHelloArray(){
 		if (newyorkCondition.code >= 27 && newyorkCondition.code <= 30 || newyorkCondition.code >= 19 && newyorkCondition.code <= 24 || newyorkCondition.code === 25 || newyorkCondition.code === 36){
 			//worse somewhere else
 			for (i = 0; i < weatherArraySize; i++) { 
-				if(weatherArray[i].conditionCode >= 0 && weatherArray[i].conditionCode <= 17 || weatherArray[i].conditionCode >= 38 && weatherArray[i].conditionCode <= 43 || weatherArray[i].conditionCode === 35){
+				if (weatherArray[i].conditionCode === 3 || weatherArray[i].conditionCode === 35 || weatherArray[i].conditionCode >= 4 && weatherArray[i].conditionCode <= 13 || weatherArray[i].conditionCode >= 15 && weatherArray[i].conditionCode <= 19 || weatherArray[i].conditionCode >= 37 && weatherArray[i].conditionCode <= 43 || weatherArray[i].conditionCode >= 46 && weatherArray[i].conditionCode <= 47){
 					textGreeting.push(  "I know it's bad out, but at IDEO <span>" + weatherArray[i].location + "</span> theres <span>" + weatherArray[i].condition + ".</span>",
 										"If you think it's bad here, IDEO <span>" + weatherArray[i].location + "</span> theres <span>" + weatherArray[i].condition + ".</span>");
+				}
+				if (weatherArray[i].conditionCode >= 0 && weatherArray[i].conditionCode <= 2){
+					textGreeting.push(  "I know it's bad out, but at IDEO <span>" + weatherArray[i].location + "</span> theres a <span>" + weatherArray[i].condition + ".</span>",
+										"If you think it's bad here, IDEO <span>" + weatherArray[i].location + "</span> theres a <span>" + weatherArray[i].condition + ".</span>");
 				}
 			}
 		}
@@ -405,13 +419,13 @@ function buildTextHelloArray(){
 		if (newyorkCondition.code >= 0 && newyorkCondition.code <= 25 || newyorkCondition.code >= 37 && newyorkCondition.code <= 47){
 			//better somewhere else
 			for (i = 0; i < weatherArraySize; i++) { 
-				if(weatherArray[i].conditionCode >= 29 && weatherArray[i].conditionCode <= 34 || weatherArray[i].conditionCode === 24 || weatherArray[i].conditionCode === 25 || weatherArray[i].conditionCode === 36){
+				if(weatherArray[i].conditionCode >= 29 && weatherArray[i].conditionCode <= 34 || weatherArray[i].conditionCode === 36){
 					textGreeting.push(  "At IDEO <span>" + weatherArray[i].location + "</span> the weather is <span>" + weatherArray[i].condition + "</span> right now",
 										"Wish you were at IDEO <span>" + weatherArray[i].location + "</span>? The weather is <span>" + weatherArray[i].condition + "</span> there.");
 				}
 			}
 			//better tomorrow
-			if (tomorrowsCondition >= 29 && tomorrowsCondition <= 35 || tomorrowsCondition === 24 || tomorrowsCondition === 25 || tomorrowsCondition === 36){
+			if (weatherArray[i].conditionCode >= 29 && weatherArray[i].conditionCode <= 34 || weatherArray[i].conditionCode === 36){
 				textGreeting.push(	"Don't worry, the weather will be beautiful tomorrow.",
 									"Tomorrow's weather will be better. I promise.",
 									"Tomorrow will be (condition).");
@@ -427,9 +441,15 @@ function buildTextHelloArray(){
 
 			//worse somewhere else
 			for (i = 0; i < weatherArraySize; i++) { 
-				if(weatherArray[i].conditionCode >= 0 && weatherArray[i].conditionCode <= 25 || weatherArray[i].conditionCode === 37 || weatherArray[i].conditionCode === 47){
-					textGreeting.push( 	"Be happy it's nice outside. It's <span>" + weatherArray[i].condition + "</span>, at IDEO <span>" + weatherArray[i].location + ".</span>",
-										"Poor IDEO <span>" + weatherArray[i].location + "</span>. It’s <span>" + weatherArray[i].condition + "</span> there.");
+				(0-25, 37, 47)
+				if (weatherArray[i].conditionCode === 3 || weatherArray[i].conditionCode === 35 || weatherArray[i].conditionCode >= 4 && weatherArray[i].conditionCode <= 13 || weatherArray[i].conditionCode >= 15 && weatherArray[i].conditionCode <= 19 || weatherArray[i].conditionCode >= 37 && weatherArray[i].conditionCode <= 43 || weatherArray[i].conditionCode >= 46 && weatherArray[i].conditionCode <= 47){
+					textGreeting.push( 	"Be happy it's nice outside. There are <span>" + weatherArray[i].condition + "</span>, at IDEO <span>" + weatherArray[i].location + ".</span>",
+										"Poor IDEO <span>" + weatherArray[i].location + "</span>. There are <span>" + weatherArray[i].condition + "</span> there.");
+				}
+				if (weatherArray[i].conditionCode >= 0 && weatherArray[i].conditionCode <= 2){
+					textGreeting.push( 	"Be happy it's nice outside. Theres a <span>" + weatherArray[i].condition + "</span>, at IDEO <span>" + weatherArray[i].location + ".</span>",
+										"Poor IDEO <span>" + weatherArray[i].location + "</span>. Theres a <span>" + weatherArray[i].condition + ".</span>");
+
 				}
 			}
 		}
@@ -561,20 +581,8 @@ function isHoliday(){
 		month 	= date.getMonth(),
 		day 	= date.getDate();
 
-	if (month === 0 && (day >= 1 || day <= 7)){//new years week
+		   if (month === 0 && (day >= 1 || day <= 7)){//new years week
 		helloAnimation("Happy New Year!", "#62FF00", "#62FF00");
-		isItAHoliday = true;
-	} else if (month === 8 && day === 10){//Easter Egg
-		helloAnimation("HELP ME I'M TRAPPED IN THIS MACHINE", "#BADA55", "#BADA55");
-		isItAHoliday = true;
-	} else if (month === 6 && day === 4){//Independence day
-		helloAnimation("Happy independence day!", "#006AFF");
-		isItAHoliday = true;
-	} else if (month === 6 && day === 1){//Canada day
-		helloAnimation("Happy Canada day from your friends up north!", "#FF0000", "#FF0000");
-		isItAHoliday = true;
-	} else if (month === 9 && day === 31){//Halloween
-		helloAnimation("Boo! It's Halloween!", "#FF8000", "#FF8000");
 		isItAHoliday = true;
 	} else if (month === 1 && day === 14){//Valentines Day
 		helloAnimation("Happy valentines day!", "#FF00FF", "#FF00FF");
@@ -582,20 +590,32 @@ function isHoliday(){
 	} else if (month === 2 && day === 17){//St. Patrick's Day
 		helloAnimation("St. Patrick's Day", "#00FF00", "#00FF00");
 		isItAHoliday = true;
-	} else if (month === 11 && (day >= 20 || day <= 30)){//Happy Holidays (Christmas and such)
-		helloAnimation("Happy Holidays!", "#FF0000", "#FF0000");
-		isItAHoliday = true;
 	} else if (month === 2 && day === 20){//first day of spring
 		helloAnimation("Happy first day of spring!", "#00FF95", "#00FF95");
 		isItAHoliday = true;
 	} else if (month === 5 && day === 21){//first day of summer
 		helloAnimation("Happy first day of summer!", "#FFBF00", "#FFBF00");
 		isItAHoliday = true;
+	} else if (month === 6 && day === 4){//Independence day
+		helloAnimation("Happy independence day!", "#006AFF");
+		isItAHoliday = true;
+	} else if (month === 6 && day === 1){//Canada day
+		helloAnimation("Happy Canada day from your friends up north!", "#FF0000", "#FF0000");
+		isItAHoliday = true;
+	} else if (month === 8 && day === 10){//Easter Egg
+		helloAnimation("HELP ME I'M TRAPPED IN THIS MACHINE", "#BADA55", "#BADA55");
+		isItAHoliday = true;
 	} else if (month === 8 && day === 23){//first day of fall
 		helloAnimation("Happy first day of fall!", "#FFBF00", "#FFBF00");
 		isItAHoliday = true;
+	} else if (month === 9 && day === 31){//Halloween
+		helloAnimation("Boo! It's Halloween!", "#FF8000", "#FF8000");
+		isItAHoliday = true;
 	} else if (month === 11 && day === 21){//first day of winter
 		helloAnimation("Happy first day of winter!", "#00FBFF", "#00FBFF");
+		isItAHoliday = true;
+	} else if (month === 11 && (day >= 20 || day <= 30)){//Happy Holidays (Christmas and such)
+		helloAnimation("Happy Holidays!", "#FF0000", "#FF0000");
 		isItAHoliday = true;
 	}/* else { //test holiday
 		helloAnimation("Test Holiday", "#F45358", "#F45358");
@@ -698,11 +718,11 @@ function helloLogic(){
 
 	//test if theres a custom input
 	if (isThereCustomInput === true){
-		console.log("there is a custom input");
+		console.log("There is a custom input");
 		customHello(customGreetingArray);
 	//test if its a holiday
 	} else if (isItAHoliday === true){
-		console.log("its a holiday");
+		console.log("Today is a holiday");
 		isHoliday();
 	} else if (isItAHoliday === false){
 		//choose between text hello or video hello
@@ -730,7 +750,7 @@ function getSensorInfo(){
 			if (parsedData === 1){
 				//function to say hello
 				helloLogic();
-				console.log("motion detected");
+				console.log("Motion detected");
 				//only trigger hello every X seconds
 				setTimeout(function(){
 					getSensorInfo();
@@ -744,32 +764,196 @@ function getSensorInfo(){
 			} else {
 				setTimeout(function(){
 					getSensorInfo();
-					console.log("Could not parse data could be internet issue");
+					alert("No information was given from the sensor. The internet may be disconnected or the sensor may need to be restarted.");
 				}, 150);
 			}
+        },
+        fail: function(){
+        	setTimeout(getSensorInfo(), 800);
+        	alert("No sensor detected. Either restart the sensor by disconnecting and reconnecting it, or check the wifi");
         }
     });
 }
 
   //====================================================================//
- // Get all instagram photos with #ideony 
+ // Get all instagram photos from all the IDEO offices
 //====================================================================//
 function getInstagram(){
+	//get instagram images for ny based on our hashtag
 	$.ajax({
-		type: "GET",
-		dataType: "jsonp",
-		cache: false,
+		type: "GET", dataType: "jsonp", cache: false,
 		url: "https://api.instagram.com/v1/tags/" + hashtag + "/media/recent?client_id=" + clientID,
 		success: function(data) {
 			var images = data.data;
 			for (var i = 0; i < images.length; ++i) {
 				var imageUrl = images[i].images.standard_resolution.url;
-				$(".instagramFeed").append("<div class='instagramImage' style='background: url(" + imageUrl + ") no-repeat center; background-size: cover;'></div>");
+				$(".ideony").append("<div class='instagramImage' style='background: url(" + imageUrl + ") no-repeat center; background-size: cover;'></div>");
 			}
 		}
 	});
+	function instagramByLocation(location, element){
+		$.ajax({
+			type: "GET", dataType: "jsonp", cache: false,
+			url: "https://api.instagram.com/v1/locations/" + location + "/media/recent?access_token=427885839.5b9e1e6.4eca594a2d304eac8631d5fbfdd9de95&count=35",
+			success: function(data) {
+				var images = data.data;
+				//add images to the array
+				for (var i = 0; i < images.length; ++i) {
+					var imageUrl = images[i].images.standard_resolution.url;
+					element.append("<div class='instagramImage' style='background: url(" + imageUrl + ") no-repeat center; background-size: cover;'></div>");
+				}
+				//if there aren't enough images to fill then look for some more
+				if (images.length < 15){
+					//get the next page of results and append them to the current results
+					var nextPage = data.pagination.next_url;
+					//look up more images
+					$.ajax({
+						type: "GET", dataType: "jsonp", cache: false,
+						url: nextPage,
+						success: function(data2) {
+							//add the new images to the array
+							var images2 = data2.data;
+							//add those images to the html
+							for (var i = 0; i < images2.length; ++i) {
+								var imageUrl = images2[i].images.standard_resolution.url;
+								element.append("<div class='instagramImage' style='background: url(" + imageUrl + ") no-repeat center; background-size: cover;'></div>");
+							}
+							//if we still need more images
+							if (images.length < 15){
+								//get the next page of results and append them to the current results
+								var nextPage2 = data2.pagination.next_url;
+								//look up even more images
+								$.ajax({
+									type: "GET", dataType: "jsonp", cache: false,
+									url: nextPage2,
+									success: function(data3) {
+										//add the new images to the array
+										var images3 = data3.data;
+										//add those images to the html
+										for (var i = 0; i < images3.length; ++i) {
+											var imageUrl = images3[i].images.standard_resolution.url;
+											element.append("<div class='instagramImage' style='background: url(" + imageUrl + ") no-repeat center; background-size: cover;'></div>");
+										}
+									}
+								});
+							}
+						}
+					});
+				} 
+			}
+		});
+	}
+	instagramByLocation(location1, $(".ideosf")); //san fran
+	instagramByLocation(location2, $(".ideolondon")); //london
+	instagramByLocation(location3, $(".ideochicago")); //chicago
+	instagramByLocation(location4, $(".ideopaloalto")); //palo alto
+	instagramByLocation(location5, $(".ideoboston")); //boston
+	instagramByLocation(location6, $(".ideomunich")); //munich
+	instagramByLocation(location7, $(".ideosingapore")); //singapore
+	instagramByLocation(location8, $(".ideotokyo")); //tokyo
+	instagramByLocation(location9, $(".ideoshanghai")); //shanghai	
 }
 
+  //====================================================================//
+ // Flipping animation between studios instagram feeds
+//====================================================================//
+function studioTransitions(){
+	var studioCount 	= $(".instagramFeed").length - 1, 
+		instagramFeed	= $(".instagramFeed"),
+		visibleClass	= "visible";
+
+	//initial animation so hteres no 20 second delay
+	if (initialAnimate  === false){
+		studioShowAnimation(0);
+		initialAnimate = true;
+	}
+	//animation function
+	function studioShowAnimation(index){
+		var appearingElement = instagramFeed.eq(index).children(".instagramImage");
+		//show the label
+		$(".instagramFeed img").removeClass("fadeIn");
+		instagramFeed.eq(index).children("img").addClass("fadeIn");
+		//do the animate thing
+		appearingElement.eq(0).addClass(visibleClass);
+		setTimeout(function(){
+			appearingElement.eq(1).addClass(visibleClass);
+			appearingElement.eq(5).addClass(visibleClass);
+		}, 150);
+		setTimeout(function(){
+			appearingElement.eq(2).addClass(visibleClass);
+			appearingElement.eq(6).addClass(visibleClass);
+			appearingElement.eq(10).addClass(visibleClass);
+		}, 300);
+		setTimeout(function(){
+			appearingElement.eq(3).addClass(visibleClass);
+			appearingElement.eq(7).addClass(visibleClass);
+			appearingElement.eq(11).addClass(visibleClass);
+		}, 450);
+		setTimeout(function(){
+			appearingElement.eq(4).addClass(visibleClass);
+			appearingElement.eq(8).addClass(visibleClass);
+			appearingElement.eq(12).addClass(visibleClass);
+		}, 600);
+		setTimeout(function(){
+			appearingElement.eq(9).addClass(visibleClass);
+			appearingElement.eq(13).addClass(visibleClass);
+		}, 750);
+		setTimeout(function(){
+			appearingElement.eq(14).addClass(visibleClass);
+		}, 900);
+	}
+
+	function studioHideAnimation(index){
+		var hidingElement = instagramFeed.eq(index).children(".instagramImage");
+		hidingElement.eq(0).removeClass(visibleClass);
+		setTimeout(function(){
+			hidingElement.eq(1).removeClass(visibleClass);
+			hidingElement.eq(5).removeClass(visibleClass);
+		}, 150);
+		setTimeout(function(){
+			hidingElement.eq(2).removeClass(visibleClass);
+			hidingElement.eq(6).removeClass(visibleClass);
+			hidingElement.eq(10).removeClass(visibleClass);
+		}, 300);
+		setTimeout(function(){
+			hidingElement.eq(3).removeClass(visibleClass);
+			hidingElement.eq(7).removeClass(visibleClass);
+			hidingElement.eq(11).removeClass(visibleClass);
+		}, 450);
+		setTimeout(function(){
+			hidingElement.eq(4).removeClass(visibleClass);
+			hidingElement.eq(8).removeClass(visibleClass);
+			hidingElement.eq(12).removeClass(visibleClass);
+		}, 600);
+		setTimeout(function(){
+			hidingElement.eq(9).removeClass(visibleClass);
+			hidingElement.eq(13).removeClass(visibleClass);
+		}, 750);
+		setTimeout(function(){
+			hidingElement.eq(14).removeClass(visibleClass);
+		}, 900);
+	}
+
+	//repeating animation
+	instagramAnimationInterval = setInterval(function(){
+		//update visual animations
+		if (currentSection === 0){
+			studioShowAnimation(currentSection);
+			studioHideAnimation(studioCount);
+		} else {
+			studioShowAnimation(currentSection);
+			studioHideAnimation(currentSection - 1);
+		}
+		//update counter
+		if (currentSection === studioCount){
+			//restart counter
+			currentSection = 0;
+		} else {
+			//update counter
+			currentSection++;
+		}
+	}, timeBetweenInstagrams);
+}
 
   //====================================================================//
  // Initialize all functions
@@ -777,12 +961,18 @@ function getInstagram(){
 $(document).ready(function(){
 	//infinite loop to check for sensor info
 	getSensorInfo();
+
+	//setup instagram + instagram animation
 	getInstagram();
+	$(window).load(function(){
+		studioTransitions();
+	});
 
 	//refresh text array every 2 minutes
 	buildTextHelloArray();
 	setInterval(function(){
 		buildTextHelloArray();
+		console.log("Hello text array built");
 	}, 120000);
 });
 
