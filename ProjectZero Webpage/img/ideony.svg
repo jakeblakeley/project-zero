@@ -4,9 +4,6 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="840px" height="180px" viewBox="0 0 840 180" enable-background="new 0 0 840 180" xml:space="preserve">
 <g>
-	
-		<image overflow="visible" opacity="0.4" width="477" height="133" xlink:href="DE30803BEFD0A6D3.png"  transform="matrix(1 0 0 1 117.5 3.5)">
-	</image>
 	<g>
 		<g>
 			<g>
@@ -33,9 +30,6 @@
 	</g>
 </g>
 <g>
-	
-		<image overflow="visible" opacity="0.4" width="114" height="124" xlink:href="DE30803BEFD0A6D1.png"  transform="matrix(1 0 0 1 11.5 8.5)">
-	</image>
 	<g>
 		<g>
 			<g>
@@ -49,16 +43,13 @@
 	</g>
 </g>
 <g enable-background="new    ">
-	
-		<image overflow="visible" opacity="0.4" width="260" height="132" xlink:href="DE30803BEFD0A6D7.png"  transform="matrix(1 0 0 1 571.5 7.5)">
-	</image>
 	<g>
 		<g>
-			<path fill="#FFFFFF" d="M633.969,42.253h-1.35L615.22,112.15h15.3l-2.25,9.899h-41.248l2.249-9.899h14.85l19.649-78.897H608.62
-				l2.399-9.899h31.649l30.599,72.597h1.35l15.6-62.698h-15.3l2.4-9.899h41.398l-2.4,9.899h-14.999l-22.799,91.197h-10.2
+			<path fill="#FFFFFF" d="M633.969,42.253h-1.35L615.22,112.15h15.3l-2.25,9.898h-41.248l2.25-9.898h14.85l19.648-78.897H608.62
+				l2.398-9.899h31.649l30.599,72.597h1.351l15.6-62.698h-15.3l2.4-9.899h41.397l-2.4,9.899h-14.998l-22.8,91.197h-10.2
 				L633.969,42.253z"/>
-			<path fill="#FFFFFF" d="M791.915,33.253h-11.999l2.399-9.899h33.898l-2.399,9.899h-10.95l-40.648,48.598l-7.499,30.299h15.299
-				l-2.25,9.899h-45.748l2.25-9.899h15l8.1-32.249l-14.55-46.648h-11.999l2.399-9.899h42.298l-2.399,9.899h-13.8l11.25,38.698
+			<path fill="#FFFFFF" d="M791.915,33.253h-11.999l2.398-9.899h33.898l-2.398,9.899h-10.95l-40.648,48.598l-7.499,30.299h15.299
+				l-2.25,9.898h-45.748l2.25-9.898h15l8.101-32.25l-14.55-46.648h-11.999l2.398-9.899h42.298l-2.398,9.899h-13.801l11.25,38.698
 				L791.915,33.253z"/>
 		</g>
 	</g>
