@@ -6,7 +6,7 @@
   
   Hardware:     Arduino Ethernet and PIR Motion sensor.
  
-  Author:       Jake Blakeley
+  Author:       Jake Blakeley (johnjacob.ca)
 --------------------------------------------------------------*/
 
 #include <SPI.h>
@@ -15,7 +15,7 @@
 // MAC address from Ethernet shield sticker under board
 byte mac[] = { 
   0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(10,7,4,12);
+IPAddress ip(10,7,1,161);
 EthernetServer server(80);  // create a server at port 80
 
 //variables for motion sensor

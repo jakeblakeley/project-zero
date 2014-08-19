@@ -740,7 +740,7 @@ $(".perspective").click(function(){
 //====================================================================//
 function getSensorInfo(){
 	$.ajax({
-		url: "http://10.7.4.12/",
+		url: "http://10.7.1.161",
         cache: false,
         type: 'GET',
         success: function(data) {
